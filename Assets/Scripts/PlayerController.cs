@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
 
     private InputAction moveAction;
     private InputAction lookAction;
-    private InputAction attackAction;
 
     private float pitch;
 
@@ -29,7 +28,6 @@ public class PlayerController : MonoBehaviour
 
         moveAction = InputSystem.actions.FindAction("Move");
         lookAction = InputSystem.actions.FindAction("Look");
-        attackAction = InputSystem.actions.FindAction("Attack");
     }
 
     void OnEnable()
@@ -42,7 +40,6 @@ public class PlayerController : MonoBehaviour
     {
         HandleLook();
         HandleMovement();
-        HandleAttack();
     }
 
     private void HandleMovement()
@@ -75,14 +72,5 @@ public class PlayerController : MonoBehaviour
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
         cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
-    }
-
-    private void HandleAttack()
-    {
-        if (attackAction.ReadValue<float>() != 0f)
-        {
-            Debug.Log("Attack");
-            //raycast to find enemy
-        }
     }
 }
