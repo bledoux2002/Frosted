@@ -125,5 +125,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25eff5f77a2f92f4e8319e74ed27a06e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Armor
-  Overload: 0
-  Amount: 20
+  Amount: 10
