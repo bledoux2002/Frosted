@@ -4,6 +4,10 @@ public class HealthManager : MonoBehaviour
 {
 
     private GameManager GameManager;
+    public AudioSource DamageAudio;
+    public AudioSource HealAudio;
+    public AudioSource ArmorAudio;
+
 
     public int maxHealth = 100;
     public int HP { get; private set; }
@@ -26,9 +30,14 @@ public class HealthManager : MonoBehaviour
 
         HP -= damage;
 
+        DamageAudio.Play();
+
         if (gameObject.GetComponent<PlayerController>())
             GameManager.UpdateUI();
-
+        else
+        {
+            gameObject.GetComponent<EnemyController>().Engaged = true;
+        }
         if (HP <= 0)
             Die();
     }
@@ -38,6 +47,7 @@ public class HealthManager : MonoBehaviour
         if (HP == maxHealth)
             return false;
         HP = Mathf.Min(maxHealth, HP + amount);
+        HealAudio.Play();
         GameManager.UpdateUI();
         return true;
     }
@@ -47,6 +57,7 @@ public class HealthManager : MonoBehaviour
         if (Armor == maxArmor)
             return false;
         Armor = Mathf.Min(maxArmor, Armor + amount);
+        ArmorAudio.Play();
         GameManager.UpdateUI();
         return true;
     }

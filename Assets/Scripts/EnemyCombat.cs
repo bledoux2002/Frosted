@@ -2,20 +2,11 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
+    public AudioSource FireAudio;
 
     public int damage = 10;
     public float fireRate = 2f;
     private float nextAttackTime = 0f;
-
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-
-    }
 
     public void Attack()
     {
@@ -23,6 +14,8 @@ public class EnemyCombat : MonoBehaviour
             return;
 
         nextAttackTime = Time.time + fireRate;
+
+        FireAudio.Play();
 
         // hitscan example
         if (Physics.Raycast(transform.position,

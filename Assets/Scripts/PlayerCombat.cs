@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerCombat : MonoBehaviour
 {
     private InputAction attackAction;
+    public AudioSource FireAudio;
 
     public int damage = 10;
     public float fireRate = 0.2f;
@@ -17,7 +18,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void Update()
     {
-        if (attackAction.ReadValue<float>() != 0f && Time.time >= nextAttackTime)
+        if (attackAction.ReadValue<float>() != 0f && Time.time >= nextAttackTime && !GetComponent<PlayerController>().Paused)
         {
             Attack();
         }
@@ -30,7 +31,8 @@ public class PlayerCombat : MonoBehaviour
 
         nextAttackTime = Time.time + fireRate;
 
-        // hitscan example
+        FireAudio.Play();
+        
         if (Physics.Raycast(Camera.main.transform.position,
                              Camera.main.transform.forward,
                              out RaycastHit hit,

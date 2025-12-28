@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController controller;
     private HealthManager HealthManager;
+    [HideInInspector] public bool Paused;
     private Vector3 velocity;
 
     private InputAction moveAction;
@@ -44,8 +45,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        HandleLook();
-        HandleMovement();
+        if (!Paused)
+        {
+            HandleLook();
+            HandleMovement();
+        }
     }
 
     private void HandleMovement()

@@ -1,16 +1,20 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class EnemyController : MonoBehaviour
 {
     private GameManager GameManager;
     private GameObject player;
     private EnemyCombat Combat;
+    private CharacterController controller;
+    [HideInInspector] public bool Paused;
+    [HideInInspector] public bool Engaged;
 
     public float viewDistance = 10f;
+    public float disengageDistance = 20f;
     public float moveSpeed = 2f;
     public float rotationSpeed = 10f;
-    private bool engaged;
 
 
     void Start()
@@ -18,17 +22,25 @@ public class EnemyController : MonoBehaviour
         GameManager = FindFirstObjectByType<GameManager>();
         player = FindFirstObjectByType<PlayerController>().gameObject;
         Combat = GetComponent<EnemyCombat>();
-        engaged = false;
+        controller = GetComponent<CharacterController>();
+        Paused = false;
+        Engaged = false;
     }
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) <= viewDistance || engaged)
+        if (!Paused)
         {
-            //engaged = true;
-            HandleLook();
-            HandleMovement();
-            Combat.Attack();
+            float dist = Vector3.Distance(transform.position, player.transform.position);
+            if (dist <= viewDistance || Engaged)
+            {
+                //Engaged = true;
+                HandleLook();
+                HandleMovement();
+                Combat.Attack();
+            }
+            //else if (dist >= disengageDistance)
+                //Engaged = false;
         }
     }
 
@@ -55,6 +67,13 @@ public class EnemyController : MonoBehaviour
         
         direction = direction.normalized;
 
-        transform.position += direction * moveSpeed * Time.deltaTime;
+        if (Physics.Raycast(transform.position, direction, out RaycastHit hit, 1f))
+        {
+            // Wall detected -> slide
+            Vector3 slide = Vector3.ProjectOnPlane(direction, hit.normal);
+            controller.Move(slide * moveSpeed * Time.deltaTime);
+        }
+        else
+            controller.Move(direction * moveSpeed * Time.deltaTime);
     }
 }
