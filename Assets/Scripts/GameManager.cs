@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
     {
         if (_isMenuScene) return;
 
-        if (pauseAction.ReadValue<float>() != 0f)
+        if (pauseAction.WasPressedThisFrame())
         {
             if (_paused) Instance.Resume();
             else Instance.Pause();

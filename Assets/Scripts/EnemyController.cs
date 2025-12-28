@@ -16,13 +16,16 @@ public class EnemyController : MonoBehaviour
     public float moveSpeed = 2f;
     public float rotationSpeed = 10f;
 
+    void Awake()
+    {
+        controller = GetComponent<CharacterController>();
+    }
 
     void Start()
     {
         GameManager = FindFirstObjectByType<GameManager>();
         player = FindFirstObjectByType<PlayerController>().gameObject;
         Combat = GetComponent<EnemyCombat>();
-        controller = GetComponent<CharacterController>();
         Paused = false;
         Engaged = false;
     }
