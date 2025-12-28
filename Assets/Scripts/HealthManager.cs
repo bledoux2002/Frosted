@@ -6,40 +6,36 @@ public class HealthManager : MonoBehaviour
     private GameManager GameManager;
     public AudioSource DamageAudio;
     public AudioSource HealAudio;
-    public AudioSource ArmorAudio;
+    public AudioSource DieAudio;
 
 
     public int maxHealth = 100;
     public int HP { get; private set; }
 
-    public int maxArmor = 0;
-    public int Armor { get; private set; }
-
     void Awake()
     {
         GameManager = FindFirstObjectByType<GameManager>();
         HP = maxHealth;
-        Armor = 0;
     }
 
     public void TakeDamage(int damage)
     {
-        int armorAbsorb = Mathf.Min(Armor, damage);
-        Armor -= armorAbsorb;
-        damage -= armorAbsorb;
-
-        HP -= damage;
-
-        DamageAudio.Play();
-
-        if (gameObject.GetComponent<PlayerController>())
-            GameManager.UpdateUI();
-        else
+        if (HP > 0)
         {
-            gameObject.GetComponent<EnemyController>().Engaged = true;
+            HP -= damage;
+
+            if (Random.Range(0f, 1f) <= 0.1f)
+                DamageAudio.Play();
+
+            if (gameObject.GetComponent<PlayerController>())
+                GameManager.UpdateUI();
+            else
+            {
+                gameObject.GetComponent<EnemyController>().Engaged = true;
+            }
+            if (HP <= 0)
+                Die();
         }
-        if (HP <= 0)
-            Die();
     }
 
     public bool Heal(int amount)
@@ -52,18 +48,18 @@ public class HealthManager : MonoBehaviour
         return true;
     }
 
-    public bool AddArmor(int amount)
-    {
-        if (Armor == maxArmor)
-            return false;
-        Armor = Mathf.Min(maxArmor, Armor + amount);
-        ArmorAudio.Play();
-        GameManager.UpdateUI();
-        return true;
-    }
-
     void Die()
     {
-        Destroy(gameObject);
+        if (GetComponent<EnemyController>())
+        {
+            DieAudio.transform.parent = null;
+            DieAudio.Play();
+            Destroy(DieAudio.gameObject, DieAudio.clip.length);
+            Destroy(gameObject, DieAudio.clip.length);
+        }
+        else
+        {
+            GameManager.GameOver();
+        }
     }
 }

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     
     private InputAction pauseAction;
     private GameObject pauseMenuUI;
+    private GameObject resumeButton;
     private bool _paused;
     public bool IsPaused => _paused;
     private bool _isMenuScene;
@@ -54,6 +55,8 @@ public class GameManager : MonoBehaviour
             player = FindFirstObjectByType<PlayerController>();
             pauseMenuUI = GameObject.Find("PauseMenu")
                           ?? FindInactive("PauseMenu");
+            resumeButton = GameObject.Find("ResumeButton")
+                          ?? FindInactive("ResumeButton");
             healthText = GameObject.FindWithTag("HealthText").GetComponent<TMP_Text>();
             armorText = GameObject.FindWithTag("ArmorText").GetComponent<TMP_Text>();
 
@@ -144,9 +147,15 @@ public class GameManager : MonoBehaviour
     public void UpdateUI()
     {
         int health = player.GetComponent<HealthManager>().HP;
-        int armor = player.GetComponent<HealthManager>().Armor;
+        int filter = player.GetComponent<FilterManager>().Filter;
 
         healthText.text = health.ToString();
-        armorText.text = armor.ToString();
+        armorText.text = filter.ToString();
+    }
+
+    public void GameOver()
+    {
+        Pause();
+        resumeButton.SetActive(false);
     }
 }

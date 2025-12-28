@@ -17,7 +17,6 @@ public class EnemyCombat : MonoBehaviour
 
         FireAudio.Play();
 
-        // hitscan example
         if (Physics.Raycast(transform.position,
                              transform.forward,
                              out RaycastHit hit,

@@ -1,7 +1,6 @@
-﻿public class Armor : Pickup
+﻿public class Filter : Pickup
 {
 
-    public bool Overload = false;
     public int Amount = 20;
 
 }

@@ -15,6 +15,7 @@ grunt.wav: https://freesound.org/s/536599/
 yell.wav: https://freesound.org/s/536719/
 shatter.flac: https://freesound.org/s/422633/
 breathe.wav: https://freesound.org/s/571004/
-Gask mask model: https://skfb.ly/oLSQG
+Gas mask model: https://skfb.ly/oLSQG
 Snow texture (ground): https://assetstore.unity.com/packages/2d/textures-materials/water/stylize-snow-texture-153579
 Low poly winter models: https://assetstore.unity.com/packages/3d/environments/3d-low-poly-environment-assets-299354
+Gas mask png: https://www.vecteezy.com/png/9384500-gas-mask-clipart-design-illustration

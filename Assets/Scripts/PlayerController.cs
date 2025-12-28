@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour
 
     private CharacterController controller;
     private HealthManager HealthManager;
+    private FilterManager FilterManager;
     [HideInInspector] public bool Paused;
     private Vector3 velocity;
 
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         HealthManager = GetComponent<HealthManager>();
+        FilterManager = GetComponent<FilterManager>();
 
         moveAction = InputSystem.actions.FindAction("Move");
         sprintAction = InputSystem.actions.FindAction("Sprint");
@@ -97,10 +99,10 @@ public class PlayerController : MonoBehaviour
                     Destroy(healthPack.gameObject);
                 break;
 
-            case Armor armorPack:
-                del = HealthManager.AddArmor(armorPack.Amount);
+            case Filter filter:
+                del = FilterManager.AddFilter(filter.Amount);
                 if (del)
-                    Destroy(armorPack.gameObject);
+                    Destroy(filter.gameObject);
                 break;
 
             case Mask mask:
