@@ -1,11 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using UnityEngine.Windows;
 
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
     public float moveSpeed = 6f;
+    public float sprintSpeed = 10f;
     public float gravity = -20f;
 
     [Header("Look")]
@@ -15,9 +17,11 @@ public class PlayerController : MonoBehaviour
     public float maxPitch = 80f;
 
     private CharacterController controller;
+    private HealthManager HealthManager;
     private Vector3 velocity;
 
     private InputAction moveAction;
+    private InputAction sprintAction;
     private InputAction lookAction;
 
     private float pitch;
@@ -25,8 +29,10 @@ public class PlayerController : MonoBehaviour
     void Awake()
     {
         controller = GetComponent<CharacterController>();
+        HealthManager = GetComponent<HealthManager>();
 
         moveAction = InputSystem.actions.FindAction("Move");
+        sprintAction = InputSystem.actions.FindAction("Sprint");
         lookAction = InputSystem.actions.FindAction("Look");
     }
 
@@ -49,7 +55,7 @@ public class PlayerController : MonoBehaviour
             transform.right * moveInput.x +
             transform.forward * moveInput.y;
 
-        move = move.normalized * moveSpeed;
+        move = move.normalized * (sprintAction.ReadValue<float>() > 0f ? sprintSpeed : moveSpeed);
 
         if (controller.isGrounded)
             velocity.y = 0f;
@@ -72,5 +78,31 @@ public class PlayerController : MonoBehaviour
         pitch -= mouseY;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
         cameraPivot.localRotation = Quaternion.Euler(pitch, 0f, 0f);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        Pickup pickup = other.gameObject.GetComponent<Pickup>();
+        bool del = false;
+
+        switch (pickup)
+        {
+            case Health healthPack:
+                del = HealthManager.Heal(healthPack.Amount);
+                if (del)
+                    Destroy(healthPack.gameObject);
+                break;
+
+            case Armor armorPack:
+                del = HealthManager.AddArmor(armorPack.Amount);
+                if (del)
+                    Destroy(armorPack.gameObject);
+                break;
+
+            case Mask mask:
+                Debug.Log($"Mask acquired: {mask.type}");
+                Destroy(mask.gameObject);
+                break;
+        }
     }
 }

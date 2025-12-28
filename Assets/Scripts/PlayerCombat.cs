@@ -36,7 +36,7 @@ public class PlayerCombat : MonoBehaviour
                              out RaycastHit hit,
                              100f))
         {
-            hit.collider.GetComponent<Health>()?.TakeDamage(damage);
+            hit.collider.GetComponent<HealthManager>()?.TakeDamage(damage);
         }
     }
 }

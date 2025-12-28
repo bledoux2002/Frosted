@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour
 
     public void UpdateUI()
     {
-        int health = player.GetComponent<Health>().HP;
-        int armor = player.GetComponent<Health>().Armor;
+        int health = player.GetComponent<HealthManager>().HP;
+        int armor = player.GetComponent<HealthManager>().Armor;
 
         healthText.text = health.ToString();
         armorText.text = armor.ToString();
