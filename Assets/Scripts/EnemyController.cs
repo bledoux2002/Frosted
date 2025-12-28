@@ -1,43 +1,60 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     private GameManager GameManager;
     private GameObject player;
+    private EnemyCombat Combat;
 
-    public float viewDistance = 20f;
-    public int damage = 10;
-    public float fireRate = 2f;
-    private float nextAttackTime = 0f;
+    public float viewDistance = 10f;
+    public float moveSpeed = 2f;
+    public float rotationSpeed = 10f;
+    private bool engaged;
+
 
     void Start()
     {
         GameManager = FindFirstObjectByType<GameManager>();
         player = FindFirstObjectByType<PlayerController>().gameObject;
+        Combat = GetComponent<EnemyCombat>();
+        engaged = false;
     }
 
     void Update()
     {
-        if (Vector3.Distance(transform.position, player.transform.position) <= viewDistance)
+        if (Vector3.Distance(transform.position, player.transform.position) <= viewDistance || engaged)
         {
-            Attack();
+            //engaged = true;
+            HandleLook();
+            HandleMovement();
+            Combat.Attack();
         }
     }
 
-    private void Attack()
+    private void HandleLook()
     {
-        if (Time.time < nextAttackTime)
+        Vector3 direction = player.transform.position - transform.position;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
             return;
 
-        nextAttackTime = Time.time + fireRate;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.RotateTowards(
+            transform.rotation,
+            targetRotation,
+            rotationSpeed * Time.deltaTime
+        );
+    }
 
-        // hitscan example
-        if (Physics.Raycast(transform.position,
-                             transform.forward,
-                             out RaycastHit hit,
-                             100f))
-        {
-            hit.collider.GetComponent<HealthManager>()?.TakeDamage(damage);
-        }
+    private void HandleMovement()
+    {
+        Vector3 direction = player.transform.position - transform.position;
+        direction.y = 0f;
+        
+        direction = direction.normalized;
+
+        transform.position += direction * moveSpeed * Time.deltaTime;
     }
 }

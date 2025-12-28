@@ -2022,6 +2022,7 @@ GameObject:
   - component: {fileID: 1376786799}
   - component: {fileID: 1376786803}
   - component: {fileID: 1376786804}
+  - component: {fileID: 1376786805}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -2137,9 +2138,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ec448c136b787247ba27cc98f866c61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  viewDistance: 20
-  damage: 10
-  fireRate: 2
+  viewDistance: 10
+  moveSpeed: 1
+  rotationSpeed: 100
 --- !u!114 &1376786804
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2154,6 +2155,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthManager
   maxHealth: 100
   maxArmor: 0
+--- !u!114 &1376786805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1376786798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9188e4e36f0a1d45bc0388a2137fa83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  damage: 10
+  fireRate: 2
 --- !u!1 &1417293027
 GameObject:
   m_ObjectHideFlags: 0
