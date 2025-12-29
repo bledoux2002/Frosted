@@ -24,7 +24,6 @@ public class EnemyCombat : MonoBehaviour
                              out RaycastHit hit,
                              100f, playerLayerMask))
         {
-            Debug.Log("Hit");
             hit.collider.GetComponent<HealthManager>()?.TakeDamage(damage);
         }
     }

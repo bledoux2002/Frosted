@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public float maxPitch = 80f;
 
     private CharacterController controller;
+    private GameManager GameManager;
     private HealthManager HealthManager;
     private FilterManager FilterManager;
     [HideInInspector] public bool Paused;
@@ -30,6 +31,7 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        GameManager = FindFirstObjectByType<GameManager>();
         controller = GetComponent<CharacterController>();
         HealthManager = GetComponent<HealthManager>();
         FilterManager = GetComponent<FilterManager>();
@@ -88,27 +90,34 @@ public class PlayerController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Pickup pickup = other.gameObject.GetComponent<Pickup>();
-        bool del = false;
-
-        switch (pickup)
+        if (other.gameObject.CompareTag("Finish"))
         {
-            case Health healthPack:
-                del = HealthManager.Heal(healthPack.Amount);
-                if (del)
-                    Destroy(healthPack.gameObject);
-                break;
-
-            case Filter filter:
-                del = FilterManager.AddFilter(filter.Amount);
-                if (del)
-                    Destroy(filter.gameObject);
-                break;
-
-            case Mask mask:
-                Debug.Log($"Mask acquired: {mask.type}");
-                Destroy(mask.gameObject);
-                break;
+            GameManager.GameOver();
+        }
+        else
+        {
+            Pickup pickup = other.gameObject.GetComponent<Pickup>();
+            bool del = false;
+    
+            switch (pickup)
+            {
+                case Health healthPack:
+                    del = HealthManager.Heal(healthPack.Amount);
+                    if (del)
+                        Destroy(healthPack.gameObject);
+                    break;
+    
+                case Filter filter:
+                    del = FilterManager.AddFilter(filter.Amount);
+                    if (del)
+                        Destroy(filter.gameObject);
+                    break;
+    
+                case Mask mask:
+                    Debug.Log($"Mask acquired: {mask.type}");
+                    Destroy(mask.gameObject);
+                    break;
+            }
         }
     }
 }

@@ -3,7 +3,7 @@
 Submission for [Winter MelonJam 2025](https://itch.io/jam/wmj2025), theme: Mask.
 
 
-## Credits
+## Credits*
 Heart PNG: https://psdgraphics.com/signs-symbols/heart-shapes-png-collection/#google_vignette
 Shield PNG: https://pngimg.com/image/103593#google_vignette
 heal.wav: https://freesound.org/s/562292/
@@ -19,3 +19,5 @@ Gas mask model: https://skfb.ly/oLSQG
 Snow texture (ground): https://assetstore.unity.com/packages/2d/textures-materials/water/stylize-snow-texture-153579
 Low poly winter models: https://assetstore.unity.com/packages/3d/environments/3d-low-poly-environment-assets-299354
 Gas mask png: https://www.vecteezy.com/png/9384500-gas-mask-clipart-design-illustration
+
+*Note: Not all assets listed here are used in the game jam submission, but are present in the repository for later usage.

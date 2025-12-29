@@ -5,9 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-
-    public static GameManager Instance; //Singleton
-
     public PlayerController player;
     
     private InputAction pauseAction;
@@ -16,8 +13,6 @@ public class GameManager : MonoBehaviour
     public GameObject GameOverText;
     private bool _paused;
     public bool IsPaused => _paused;
-    private bool _isMenuScene;
-    [SerializeField] private string menuScene = "MainMenu";
 
     [Header("UI")]
     private TMP_Text healthText;
@@ -25,50 +20,21 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
         pauseAction = InputSystem.actions.FindAction("Pause");
-    }
+        player = FindFirstObjectByType<PlayerController>();
+        pauseMenuUI = GameObject.Find("PauseMenu")
+                      ?? FindInactive("PauseMenu");
+        resumeButton = GameObject.Find("ResumeButton")
+                      ?? FindInactive("ResumeButton");
+        healthText = GameObject.FindWithTag("HealthText").GetComponent<TMP_Text>();
+        armorText = GameObject.FindWithTag("ArmorText").GetComponent<TMP_Text>();
 
-    void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+        _paused = false;
+        Time.timeScale = 1f;
+        SetCursorState(false);
 
-    void OnDisable()
-    {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        _isMenuScene = scene.name == menuScene;
-        if (!_isMenuScene)
-        {
-            player = FindFirstObjectByType<PlayerController>();
-            pauseMenuUI = GameObject.Find("PauseMenu")
-                          ?? FindInactive("PauseMenu");
-            resumeButton = GameObject.Find("ResumeButton")
-                          ?? FindInactive("ResumeButton");
-            healthText = GameObject.FindWithTag("HealthText").GetComponent<TMP_Text>();
-            armorText = GameObject.FindWithTag("ArmorText").GetComponent<TMP_Text>();
-
-            _paused = false;
-            Time.timeScale = 1f;
-            SetCursorState(_isMenuScene);
-
-            if (pauseMenuUI != null)
-                pauseMenuUI.SetActive(false);
-
-        }
+        if (pauseMenuUI != null)
+            pauseMenuUI.SetActive(false);
     }
 
     private void SetCursorState(bool visible)
@@ -90,12 +56,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (_isMenuScene) return;
-
         if (pauseAction.WasPressedThisFrame())
         {
-            if (_paused) Instance.Resume();
-            else Instance.Pause();
+            if (_paused) Resume();
+            else Pause();
         }
     }
 
@@ -139,7 +103,6 @@ public class GameManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("QuitGame");
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
